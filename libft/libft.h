@@ -104,5 +104,6 @@ int				get_next_line(const int fd, char **line);
 char			**ft_arrnew(size_t size);
 size_t			ft_arrlen(const void *a);
 void			ft_arrdel(void **a);
+void			ft_arrldel(void **a, size_t len);
 
 #endif

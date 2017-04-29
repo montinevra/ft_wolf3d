@@ -83,8 +83,12 @@ int			key_hook(int key_code, t_mlx *mlx)
 		// free(mlx->data);
 		free(mlx->win);
 		free(mlx->id);
-		ft_arrdel((void **)((t_world *)(mlx->data))->map);
-		free(((t_world *)(mlx->data))->map);
+		// int i = ~0;
+		// t_world *wld = (t_world *)mlx->data;
+		// while (++i < wld->size.y)
+		// 	free(wld->map[i]);
+		ft_arrldel((void **)((t_world *)(mlx->data))->map, ((t_world *)mlx->data)->size.y);
+		// free(wld->map);
 		exit(0);
 	}
 	// else

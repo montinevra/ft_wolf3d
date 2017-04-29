@@ -9,7 +9,7 @@ static t_coord	get_size(int fd, char **line)
 		// printf("................got first line\n");									////debug
 		size.x = ft_atoi(*line);
 		size.y = ft_atoi(ft_strchr(*line, ' '));
-		printf("................size = %d, %d\n", size.x, size.y);													//debug
+		// printf("................size = %d, %d\n", size.x, size.y);													//debug
 		// printf("................freeing first line\n");														//debug
 		free(*line);
 	}
@@ -32,7 +32,7 @@ t_world		loadmap(int fd)
 	// line = (char **)malloc(sizeof(char *));
 	// printf("................mallocied\n");															///debug
 	wld.size = get_size(fd, &line);
-	wld.map = (char **)malloc(sizeof(char *) * (wld.size.y + 1));
+	wld.map = (char **)malloc(sizeof(char *) * (wld.size.y));
 	i = ~0;
 	while (get_next_line(fd, &line) > 0 && ++i < wld.size.y)
 	{
@@ -40,7 +40,7 @@ t_world		loadmap(int fd)
 		// free(line);
 	}
 	// printf("lines = =%d\n", i);														//debug
-	wld.map[i] = NULL;
+	// wld.map[i] = NULL;
 	free(line);
 	// free(line);
 

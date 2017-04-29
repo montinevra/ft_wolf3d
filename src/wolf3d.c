@@ -35,16 +35,17 @@ void	wolf3d(t_world wld)
 	// t_world		wld;
 	// t_player	player;
 
-	mlx.wsize.x = 640;
-	mlx.wsize.y = 1400;
+	mlx.wsize.x = 500;
+	mlx.wsize.y = 500;
 	// wld.map = map;
 	wld.plr.pos = get_start(wld.map);
 	wld.plr.rot = 0;
-	wld.plr.fov.x = M_TAU / 6;
+	wld.plr.fov.x = M_TAU/ 6;
 	wld.plr.fov.y = wld.plr.fov.x;// * mlx.wsize.y / mlx.wsize.x;
+	// wld.plr.fov.y = M_TAU/ 4;//wld.plr.fov.x;// * mlx.wsize.y / mlx.wsize.x;
 
-	printf("start = %f, %f\n", wld.plr.pos.x, wld.plr.pos.y);								////debug
-	printf("fov = %.30f\n", wld.plr.fov.x);								////debug
+	// printf("start = %f, %f\n", wld.plr.pos.x, wld.plr.pos.y);								////debug
+	// printf("fov = %.30f\n", wld.plr.fov.x);								////debug
 	
 
 	// mlx.scalefr = 1.1;
@@ -55,7 +56,7 @@ void	wolf3d(t_world wld)
 	// ((t_frac *)mlx.data)->c.a = 0;
 	// ((t_frac *)mlx.data)->c.b = 0;
 	mlx.data = &wld;
-	printf("%f\n", ((t_world *)mlx.data)->plr.fov.x);									//debug
+	// printf("%f\n", ((t_world *)mlx.data)->plr.fov.x);									//debug
 	mlx_driver(mlx);	
 
 	return ;

@@ -44,10 +44,11 @@ static t_col	get_column(int col, t_mlx *mlx)
 	int 	side;
 	t_coord	step;
 
-
+	// col /= 16;
+	// col *= 16;
 	wld = *((t_world *)mlx->data);
 	angle = wld.plr.fov.x * col / mlx->wsize.x - wld.plr.fov.x / 2;
-	// printf("angle = %f\n", angle);																				//debug
+	// printf("angle = %f\n", angle + wld.plr.rot);																				//debug
 	h.x = 1.0 / cos(angle + wld.plr.rot);
 	h.y = 1.0 / sin(angle + wld.plr.rot);
 	map.x = floor(wld.plr.pos.x);
@@ -72,8 +73,13 @@ static t_col	get_column(int col, t_mlx *mlx)
 		step.y = -1;
 		sidey = (wld.plr.pos.y - map.y) * h.y;
 	}
+	printf("sidex start = %lf; sidey start = %lf\n", sidex, sidey);							//debug
 	// printf("currently in %d, %d\n", map.x, map.y);
 	// printf("my position %f, %f            ", wld.plr.pos.x, wld.plr.pos.y);												//debug
+	side = 0;
+	// map.x += step.x;
+	// map.y += step.y;
+
 
 	while (map.y >= 0 && map.x >= 0 && map.y < wld.size.y && map.x < wld.size.x && wld.map[map.y][map.x] != '1' )
 	{
@@ -91,21 +97,34 @@ static t_col	get_column(int col, t_mlx *mlx)
 			side = 1;
 		}
 	} 
+	sidex -= h.x;
+	sidey -= h.y;
 		// printf("wld.plr.fov.y = %f, tan = %f\n", wld.plr.fov.y, tan(wld.plr.fov.y));
-	column.color = map.y * 16 + ((map.x * 16) << 16);
+	column.color = map.y * 32 + ((map.x * 32) << 16);
+	// column.color = 0XAAAAAA;
 	if (side)
 	{
-		// printf("SIDEY = %f; SIDEX = %f\n", sidey, sidex);													//debug
+		printf("SIDEY = %f; SIDEX = %f\n", sidey, sidex);													//debug
+		
+
+		// column.color -= 0x4 * (int)sidey + ((0x4 * (int)sidey) << 8) + ((0x4 * (int)sidey) << 16);
+
 		column.color += 0x111111;
-		column.height = fabs((mlx->wsize.x / 2) / (sidey * cos(angle) * tan(wld.plr.fov.y / 2)));
+
+		// sidey = (map.y - wld.plr.pos.y) / sin(angle + wld.plr.rot);
+		column.height = fabs((mlx->wsize.y / 2) * 0.5 / (sidey * cos(angle) * tan(wld.plr.fov.y / 2)));
 	}
 	else
 	{
-		// printf("sidex = %f; sidey = %f\n", sidex, sidey);													//debug
-		column.height = fabs((mlx->wsize.x / 2) / (sidex * cos(angle) * tan(wld.plr.fov.y / 2)));
+		printf("sidex = %f; sidey = %f\n", sidex, sidey);													//debug
+		// sidex = (map.x - wld.plr.pos.x) / cos(angle + wld.plr.rot);
+
+
+
+		column.height = fabs((mlx->wsize.y / 2) * 0.5 / (sidex * cos(angle) * tan(wld.plr.fov.y / 2)));
 	}
 	// printf("column.height = %d\n", column.height);
-	// column.height = 100;
+	// column.height = 1100;
 	return (column);
 }
 
@@ -124,6 +143,7 @@ static void	*draw_thread(void *mlxt)
 	while (px.x < mlx->wsize.x)
 	{
 		////hack to eliminate bad heights. should not be necessary once height algorithm works
+		// printf("thread = %d ", px.x % 4);
 		col = get_column(px.x, mlx);
 		if (col.height < 0)
 		{
@@ -132,7 +152,7 @@ static void	*draw_thread(void *mlxt)
 		}
 		else if (col.height > mlx->wsize.y / 2)
 		{
-			printf("bad height: %d\n", col.height);													///debug
+			// printf("bad height: %d\n", col.height);													///debug
 			col.height = mlx->wsize.y / 2;
 		}
 		// col.height = mlx->wsize.y / 2;
@@ -180,7 +200,7 @@ void		draw(t_mlx *mlx)
 {
 
 	t_mlx_thread	mlxt[THREADS];
-	// pthread_t		thread[THREADS];
+	pthread_t		thread[THREADS];
 	int				i;
 
 	// printf("drawing.....\n");									//debug
@@ -194,15 +214,15 @@ void		draw(t_mlx *mlx)
 		mlxt[i].mlx = mlx;
 		mlxt[i].y = i;
 		// printf("thread %d starting\n", i);													////debug
-		// pthread_create(&thread[i], NULL, draw_thread, &mlxt[i]);
-		draw_thread(&mlxt[i]);
+		pthread_create(&thread[i], NULL, draw_thread, &mlxt[i]);
+		// draw_thread(&mlxt[i]);
 	}
-	// i = ~0;
-	// while (++i < THREADS)
-	// {
-	// 	pthread_join(thread[i], NULL);
-	// 	// printf("thread %d finished\n", i);													////debug
-	// }
+	i = ~0;
+	while (++i < THREADS)
+	{
+		pthread_join(thread[i], NULL);
+		// printf("thread %d finished\n", i);													////debug
+	}
 
 
 

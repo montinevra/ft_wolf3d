@@ -40,9 +40,9 @@ int	main(int argc, char const **argv)
 		}
 		wld = loadmap(fd);
 		close(fd);
-//*		debug
+/*		debug
 		int i = ~0, j = ~0;
-		while (wld.map[++j])
+		while (++j < wld.size.y)
 		{
 			i = ~0;
 			while (wld.map[j][++i])

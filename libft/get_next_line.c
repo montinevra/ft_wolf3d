@@ -15,15 +15,13 @@
 /*
 **	how to free properly:
 **
-**	char	**line;
+**	char	*line;
 **
-**	line = (char **)malloc(sizeof(char *));
-**	while (get_next_line(fd, line) > 0)
+**	while (get_next_line(fd, &line) > 0)
 **	{
 **		// whatever
-**		free(*line);
+**		free(line);
 **	}
-**	free(*line);
 **	free(line);
 */
 
