@@ -17,14 +17,9 @@ int			key_hook(int key_code, t_mlx *mlx)
 	if (key_code == 53)
 	{
 		mlx_destroy_window(mlx->id, mlx->win);
-		free(mlx->img.id);
+		mlx_destroy_image(mlx->id, mlx->img.id);
 		free(mlx->id);
-		// int i = ~0;
-		// t_wld *wld = (t_wld *)mlx->data;
-		// while (++i < wld->size.y)
-		// 	free(wld->map[i]);
 		ft_arrldel((void **)((t_wld *)(mlx->data))->map, ((t_wld *)mlx->data)->size.y);
-		// free(wld->map);
 		exit(0);
 	}
 	// else
@@ -45,9 +40,9 @@ int			key_hook(int key_code, t_mlx *mlx)
 	// 	// 	mlx->offset.b += 10 * mlx->scale;
 	// 	// else if (key_code == 126)
 	// 	// 	mlx->offset.b -= 10 * mlx->scale;
-	// 	draw(mlx);
+		// draw(mlx);
 	// }
-	// printf("key = %d\n", key_code);																		////debug
+	printf("key = %d\n", key_code);																		////debug
 	return (0);
 }
 
@@ -94,7 +89,7 @@ int			key_press_hook(int key_code, t_mlx *mlx)
 	// 	mlx->offset.b += 10 * mlx->scale;
 	// else if (key_code == 126)
 	// 	mlx->offset.b -= 10 * mlx->scale;
-	draw(mlx);
+	// draw(mlx);
 	// printf("key = %d\n", key_code);																		////debug
 
 	return (0);

@@ -17,6 +17,9 @@ int	main(int argc, char const **argv)
 	int		fd;
 	t_wld	wld;
 
+
+
+
 	if (argc != 2)
 	{
 		write(2, "usage:\t", 7);

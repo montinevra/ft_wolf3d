@@ -3,11 +3,12 @@
 # include <unistd.h>
 # include <math.h>
 # include "../libft/libft.h"
+// # include "more_math.h"
 # include "mlx_driver.h"
 #include <stdio.h>															//debug
 
 # define M_TAU M_PI * 2.0 
-# define MAXKEYS 279
+// # define MAXKEYS 279
 
 // typedef struct	s_point
 // {
@@ -27,13 +28,19 @@ typedef struct	s_pos
 	double	y;
 }				t_pos;
 
-typedef	struct	s_player
+typedef struct	s_vel
+{
+	double	mag;
+	double	dir;
+}				t_vel;
+
+typedef	struct	s_plr
 {
 	t_pos	pos;
 	t_pos	fov;
-	t_pos	vel;
+	t_vel	vel;
 	double	rot;
-}				t_player;
+}				t_plr;
 
 // typedef struct	s_keys
 // {
@@ -45,7 +52,7 @@ typedef struct	s_wld
 	char		**map;
 	char		*name;
 	t_coord		size;
-	t_player	plr;
+	t_plr		plr;
 	// int			keys[MAXKEYS];
 }				t_wld;
 

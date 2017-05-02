@@ -35,11 +35,13 @@ void	wolf3d(t_wld wld)
 	// t_wld		wld;
 	// t_player	player;
 
-	mlx.wsize.x = 640;
-	mlx.wsize.y = 400;
+	mlx.wsize.x = 640 * 2;
+	mlx.wsize.y = 400 * 2;
 	// wld.map = map;
 	wld.plr.pos = get_start(wld.map);
 	wld.plr.rot = 0;
+	wld.plr.vel.dir = .10;
+	wld.plr.vel.mag = .1;
 	wld.plr.fov.x = M_TAU / 6;
 	wld.plr.fov.y = wld.plr.fov.x * mlx.wsize.y / mlx.wsize.x;
 	// wld.plr.fov.y = M_TAU/ 4;//wld.plr.fov.x;// * mlx.wsize.y / mlx.wsize.x;

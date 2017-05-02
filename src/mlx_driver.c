@@ -37,5 +37,8 @@ void		mlx_driver(t_mlx mlx)
 	// if (ft_strequ(((t_frac *)mlx.data)->name, "julia"))
 	// mlx_hook(mlx.win, 6, 0, motion_hook, &mlx);
 	mlx_hook(mlx.win, 17, 0, exit_hook, &mlx);
+	// mlx_do_key_autorepeatoff(mlx.id);
+
+	mlx_loop_hook(mlx.id, loop_hook, &mlx);
 	mlx_loop(mlx.id);
 }
