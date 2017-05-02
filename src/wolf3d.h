@@ -43,9 +43,10 @@ typedef	struct	s_player
 typedef struct	s_wld
 {
 	char		**map;
+	char		*name;
 	t_coord		size;
 	t_player	plr;
-	int			keys[MAXKEYS];
+	// int			keys[MAXKEYS];
 }				t_wld;
 
 typedef struct	s_col

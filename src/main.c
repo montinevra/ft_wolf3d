@@ -17,23 +17,6 @@ int	main(int argc, char const **argv)
 	int		fd;
 	t_wld	wld;
 
-	// double inf = 0;
-	// printf("%lf\n", inf);
-	// int i = ~0;
-	// while (++i < 8)
-	// {
-	// 	printf("%#X ", *(((char *)&inf) + i));
-	// }
-
-
-
-
-		printf("%d\n", ft_atoi(ft_strchr("*line", ' ')));
-
-
-
-
-
 	if (argc != 2)
 	{
 		write(2, "usage:\t", 7);
@@ -48,6 +31,7 @@ int	main(int argc, char const **argv)
 			exit(1);
 		}
 		wld = loadmap(fd);
+		wld.name = (char *)argv[1];
 		close(fd);
 /*		debug
 		int i = ~0, j = ~0;

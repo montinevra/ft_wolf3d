@@ -61,7 +61,7 @@ int			key_press_hook(int key_code, t_mlx *mlx)
 {
 
 	if (key_code >= 0 && key_code <= MAXKEYS)
-		((t_wld *)(mlx->data))->keys[key_code] = 1;
+		mlx->keys[key_code] = 1;
 	if (key_code == 0)
 	{
 		move_player(mlx, ((t_wld *)(mlx->data))->plr.rot - M_TAU / 4);
@@ -103,7 +103,7 @@ int			key_press_hook(int key_code, t_mlx *mlx)
 int			key_release_hook(int key_code, t_mlx *mlx)
 {
 	if (key_code >= 0 && key_code <= MAXKEYS)
-		((t_wld *)(mlx->data))->keys[key_code] = 0;
+		mlx->keys[key_code] = 0;
 	// if (key_code == 53)
 	// {
 	// 	free(mlx->img.id);

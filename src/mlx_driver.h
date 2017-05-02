@@ -4,6 +4,7 @@
 # include <pthread.h>
 # include "../minilibx_macos/mlx.h"
 # define THREADS 4
+# define MAXKEYS 279
 
 // typedef struct	s_px
 // {
@@ -17,12 +18,6 @@ typedef struct	s_coord
 	int	x;
 	int	y;
 }				t_coord;
-
-// typedef struct	s_offset
-// {
-// 	long double	a;
-// 	long double	b;
-// }				t_offset;
 
 typedef struct	s_mlx_img
 {
@@ -39,9 +34,7 @@ typedef	struct	s_mlx
 	void		*win;
 	t_mlx_img	img;
 	t_coord		wsize;
-	// t_offset	offset;
- 	// long double	scale;
-	// float		scalefr;
+	char		keys[MAXKEYS];
 	void		*data;
 }				t_mlx;
 

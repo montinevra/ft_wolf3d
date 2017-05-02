@@ -11,12 +11,12 @@ static int	is_big_endian(void)
 
 void		mlx_driver(t_mlx mlx)
 {
-	// char	*wname;
+	char	*wname;
 
-	// wname = "Wolf3D";
+	wname = ft_strjoin("Wolf3D - ", ((t_wld *)mlx.data)->name);
 	mlx.id = mlx_init();
-	mlx.win = mlx_new_window(mlx.id, mlx.wsize.x, mlx.wsize.y, "Wolf3D");
-	// ft_strdel(&wname);
+	mlx.win = mlx_new_window(mlx.id, mlx.wsize.x, mlx.wsize.y, wname);
+	ft_strdel(&wname);
 	mlx.img.id = mlx_new_image(mlx.id, mlx.wsize.x, mlx.wsize.y);
 	mlx.img.bppx = 32;
 	mlx.img.lsize = mlx.wsize.y * mlx.img.bppx / 4;
