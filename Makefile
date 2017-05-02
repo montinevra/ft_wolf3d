@@ -1,6 +1,9 @@
 NAME = wolf3d 
 CC = gcc 
-SRC = src/main.c src/loadmap.c src/wolf3d.c src/mlx_driver.c src/mlx_handlers.c src/draw.c
+SRCDIR = src
+SRC = main.c loadmap.c wolf3d.c draw.c \
+	mlx_driver.c mlx_handlers.c mlx_key_handlers.c mlx_mouse_handlers.c
+SRC := $(SRC:%.c=$(SRCDIR)/%.c)
 OBJ := $(SRC:.c=.o) 
 CFLAGS = -Wall -Wextra -Werror 
 LIBDIR = -L./libft -L./minilibx_macos
@@ -22,6 +25,7 @@ minilibx_macos/libmlx.a:
 	make -C ./minilibx_macos
 
 clean:
+	make clean -C ./libft
 	rm -f $(OBJ)
 
 fclean: clean

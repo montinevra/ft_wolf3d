@@ -40,13 +40,13 @@ typedef	struct	s_player
 	
 // };
 
-typedef struct	s_world
+typedef struct	s_wld
 {
 	char		**map;
 	t_coord		size;
 	t_player	plr;
 	int			keys[MAXKEYS];
-}				t_world;
+}				t_wld;
 
 typedef struct	s_col
 {
@@ -54,8 +54,8 @@ typedef struct	s_col
 	int	color;
 }				t_col;
 
-t_world	loadmap(int fd);
-void	wolf3d(t_world wld);
+t_wld	loadmap(int fd);
+void	wolf3d(t_wld wld);
 void	mlx_driver(t_mlx mlx);
 
 #endif

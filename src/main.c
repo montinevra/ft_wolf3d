@@ -15,7 +15,7 @@
 int	main(int argc, char const **argv)
 {
 	int		fd;
-	t_world	wld;
+	t_wld	wld;
 
 	// double inf = 0;
 	// printf("%lf\n", inf);
@@ -24,6 +24,15 @@ int	main(int argc, char const **argv)
 	// {
 	// 	printf("%#X ", *(((char *)&inf) + i));
 	// }
+
+
+
+
+		printf("%d\n", ft_atoi(ft_strchr("*line", ' ')));
+
+
+
+
 
 	if (argc != 2)
 	{

@@ -1,5 +1,6 @@
 #include "mlx_driver.h"
 #include "mlx_handlers.h"
+#include "wolf3d.h"														//debuf
 
 static int	is_big_endian(void)
 {
@@ -22,6 +23,12 @@ void		mlx_driver(t_mlx mlx)
 	mlx.img.endian = is_big_endian();
 	mlx.img.start = mlx_get_data_addr(mlx.img.id, &mlx.img.bppx, &mlx.img.lsize,
 		&mlx.img.endian);
+	// int i = 0;
+	// while (1)
+	// {
+	// 	printf("image lenght = %d img[i] = %c\n", i, mlx.img.start[i]);										//////debug
+	// 	i++;
+	// }
 	mlx_mouse_hook(mlx.win, mouse_hook, &mlx);
 	mlx_key_hook(mlx.win, key_hook, &mlx);
 	mlx_expose_hook(mlx.win, expose_hook, &mlx);
@@ -29,5 +36,6 @@ void		mlx_driver(t_mlx mlx)
 	// mlx_hook(mlx.win, 3, 0, key_release_hook, &mlx);
 	// if (ft_strequ(((t_frac *)mlx.data)->name, "julia"))
 	// mlx_hook(mlx.win, 6, 0, motion_hook, &mlx);
+	mlx_hook(mlx.win, 17, 0, exit_hook, &mlx);
 	mlx_loop(mlx.id);
 }

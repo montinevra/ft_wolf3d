@@ -13,77 +13,67 @@
 // 	mlx->offset.b += y * (mlx->scale - oldscale);
 // }
 
-int			expose_hook(t_mlx *mlx)
-{
-	draw(mlx);
-	return (0);
-}
-
-int			exit_hook(t_mlx *mlx)
-{
-	mlx_destroy_window(mlx->id, mlx->win);
-	free(mlx->img.id);
-	free(mlx->id);
-	ft_arrldel((void **)((t_wld *)(mlx->data))->map, ((t_wld *)mlx->data)->size.y);
-	exit(0);
-	return (0);
-}
-
-// int			motion_hook(int x, int y, t_mlx *mlx)
+// int			expose_hook(t_mlx *mlx)
 // {
-// 	// ((t_frac *)mlx->data)->c.a = x * mlx->scale - mlx->offset.a;
-// 	// ((t_frac *)mlx->data)->c.b = -(y * mlx->scale - mlx->offset.b);
-// 	// draw(mlx);
-// 	x++;																							//debug
-// 	y++;																							//debug
-// 	mlx++;																							//debug
+// 	draw(mlx);
 // 	return (0);
 // }
 
-// /*
-// **	1: left
-// **	2: right
-// **	3: middle/thumbs
-// **	4: scroll up
-// **	5: scroll down
-// */
+int			motion_hook(int x, int y, t_mlx *mlx)
+{
+	// ((t_frac *)mlx->data)->c.a = x * mlx->scale - mlx->offset.a;
+	// ((t_frac *)mlx->data)->c.b = -(y * mlx->scale - mlx->offset.b);
+	// draw(mlx);
+	x++;																							//debug
+	y++;																							//debug
+	mlx++;																							//debug
+	return (0);
+}
 
-// int			mouse_hook(int button, int x, int y, t_mlx *mlx)
-// {
-// 	// if (y >= 0)
-// 	// {
-// 	// 	if (button == 1)
-// 	// 		((t_frac *)mlx->data)->i_max++;
-// 	// 	else if (button == 2)
-// 	// 		((t_frac *)mlx->data)->i_max--;
-// 	// 	else if (button == 4 || button == 5)
-// 	// 		zoom(button, x, y, mlx);
-// 	// 	else if (button == 3)
-// 	// 		init_scale(mlx);
-// 	// 	if (button >= 1 && button <= 5)
-// 	// 	{
-// 	// 		if (((t_frac *)mlx->data)->i_max == 0)
-// 	// 			((t_frac *)mlx->data)->i_max = 1;
-// 	// 		draw(mlx);
-// 	// 	}
-// 	// }
-// 	button++;																										//debug
-// 	x++;																										//debug
-// 	y++;																										//debug
-// 	mlx++;																										//debug
-// 	return (0);
-// }
+/*
+**	1: left
+**	2: right
+**	3: middle/thumbs
+**	4: scroll up
+**	5: scroll down
+*/
 
-// /*
-// **	0: a
-// **	1: s
-// **	2: d
-// **	13: w
-// **123: left
-// **124: right
-// **125: down
-// **126: up
-// */
+int			mouse_hook(int button, int x, int y, t_mlx *mlx)
+{
+	// if (y >= 0)
+	// {
+	// 	if (button == 1)
+	// 		((t_frac *)mlx->data)->i_max++;
+	// 	else if (button == 2)
+	// 		((t_frac *)mlx->data)->i_max--;
+	// 	else if (button == 4 || button == 5)
+	// 		zoom(button, x, y, mlx);
+	// 	else if (button == 3)
+	// 		init_scale(mlx);
+	// 	if (button >= 1 && button <= 5)
+	// 	{
+	// 		if (((t_frac *)mlx->data)->i_max == 0)
+	// 			((t_frac *)mlx->data)->i_max = 1;
+	// 		draw(mlx);
+	// 	}
+	// }
+	button++;																										//debug
+	x++;																										//debug
+	y++;																										//debug
+	mlx++;																										//debug
+	return (0);
+}
+
+/*
+**	0: a
+**	1: s
+**	2: d
+**	13: w
+**123: left
+**124: right
+**125: down
+**126: up
+*/
 
 // int			key_hook(int key_code, t_mlx *mlx)
 // {
