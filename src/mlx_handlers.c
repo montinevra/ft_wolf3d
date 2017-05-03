@@ -58,12 +58,12 @@ static void	handle_keys(t_mlx *mlx)
 	if (mlx->keys[123])
 	{
 		// printf("key is pressed\n");
-		plr->rot -= 0.05;
+		plr->rot -= plr->fov.x / 32;
 	}
 	if (mlx->keys[124])
 	{
 		// printf("key is pressed\n");
-		plr->rot += 0.05;
+		plr->rot += plr->fov.x / 32;
 	}
 
 }

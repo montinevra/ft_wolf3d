@@ -22,14 +22,29 @@ int			motion_hook(int x, int y, t_mlx *mlx)
 
 int			mouse_hook(int button, int x, int y, t_mlx *mlx)
 {
+	t_wld	*wld;
+
+	wld = (t_wld *)mlx->data;
 	// if (y >= 0)
 	// {
 	// 	if (button == 1)
 	// 		((t_frac *)mlx->data)->i_max++;
 	// 	else if (button == 2)
 	// 		((t_frac *)mlx->data)->i_max--;
-	// 	else if (button == 4 || button == 5)
-	// 		zoom(button, x, y, mlx);
+	if (button == 4)
+	{
+		wld->plr.fov.x *= .9;
+		if (wld->plr.fov.x < M_TAU / 180)
+			wld->plr.fov.x = M_TAU / 180;
+		wld->plr.fov.y = 2 * atan(tan(wld->plr.fov.x / 2) * mlx->wsize.y / mlx->wsize.x);
+	}
+	if (button == 5)
+	{
+		wld->plr.fov.x /= .9;
+		if (wld->plr.fov.x > M_TAU / 2.1)
+			wld->plr.fov.x = M_TAU / 2.1;
+		wld->plr.fov.y = 2 * atan(tan(wld->plr.fov.x / 2) * mlx->wsize.y / mlx->wsize.x);
+	}
 	// 	else if (button == 3)
 	// 		init_scale(mlx);
 	// 	if (button >= 1 && button <= 5)
@@ -39,10 +54,8 @@ int			mouse_hook(int button, int x, int y, t_mlx *mlx)
 	// 		draw(mlx);
 	// 	}
 	// }
-	button++;																										//debug
 	x++;																										//debug
 	y++;																										//debug
-	mlx++;																										//debug
 	return (0);
 }
 
