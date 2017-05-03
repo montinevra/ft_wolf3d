@@ -30,134 +30,124 @@
 // }
 
 
+static t_ray	ray_start(t_ray ray, t_coord grid, t_wld wld)
+{
+	if (ray.hyp.x >= 0)
+	{
+		ray.step.x = 1;
+		ray.dist.x = (grid.x + 1 - wld.plr.pos.x) * ray.hyp.x;
+	}
+	else
+	{
+		ray.step.x = -1;
+		ray.dist.x = (wld.plr.pos.x - grid.x) * ray.hyp.x;
+	}
+	if (ray.hyp.y >= 0)
+	{
+		ray.step.y = 1;
+		ray.dist.y = (grid.y + 1 - wld.plr.pos.y) * ray.hyp.y;
+	}
+	else
+	{
+		ray.step.y = -1;
+		ray.dist.y = (wld.plr.pos.y - grid.y) * ray.hyp.y;
+	}
+	return (ray);
+}
 
+static int		cast(t_ray *ray, t_coord *grid, t_wld wld, char *tiles)
+{
+	int	hside;
+
+	hside = 0;
+	while (grid->y >= 0 && grid->x >= 0 && grid->y < wld.size.y && grid->x < wld.size.x)
+	{
+		if (ft_strchr(tiles, wld.map[grid->y][grid->x]))
+			break ;
+		// printf("testing %d, %d...\n", grid->x, grid->y);
+		if (fabs(ray->dist.x) < fabs(ray->dist.y))
+		{
+			ray->dist.x += ray->hyp.x;
+			grid->x += ray->step.x;
+			hside = 0;
+		}
+		else
+		{
+			ray->dist.y += ray->hyp.y;
+			grid->y += ray->step.y;
+			hside = 1;
+		}
+	}
+	return (hside);
+}
 
 static t_col	get_column(int col, t_mlx *mlx)
 {
 	t_col	column;
 	double	angle;
 	t_wld	wld;
-	t_pos	h;
-	t_pos	dist;
-	// double	dist.y;
-	t_coord	map;
+	t_ray	ray;
+	// t_pos	ray.hyp;
+	// t_pos	ray.dist;
+	// double	ray.dist.y;
+	t_coord	grid;
 	int 	hside;
-	t_coord	step;
-	// char	tile;
+	// t_coord	ray.step;
 
-	// col /= 16;
-	// col *= 16;
 	wld = *((t_wld *)mlx->data);
-
-
-	double adj = mlx->wsize.x / tan(wld.plr.fov.x / 2);
-	double opp = col - mlx->wsize.x / 2;
-	angle = atan2(opp, adj);
-
-
-	// angle = wld.plr.fov.x * col / mlx->wsize.x - wld.plr.fov.x / 2;
-
-
+	angle = atan2(col - mlx->wsize.x / 2, mlx->wsize.x / tan(wld.plr.fov.x / 2));
 
 	// printf("angle = %f\n", angle + wld.plr.rot);																				//debug
-	h.x = 1.0 / cos(angle + wld.plr.rot);
-	h.y = 1.0 / sin(angle + wld.plr.rot);
-	map.x = floor(wld.plr.pos.x);
-	map.y = floor(wld.plr.pos.y);
-	if (h.x >= 0)
-	{
-		step.x = 1;
-		dist.x = (map.x + 1 - wld.plr.pos.x) * h.x;
-	}
-	else
-	{
-		step.x = -1;
-		dist.x = (wld.plr.pos.x - map.x) * h.x;
-	}
-	if (h.y >= 0)
-	{
-		step.y = 1;
-		dist.y = (map.y + 1 - wld.plr.pos.y) * h.y;
-	}
-	else
-	{
-		step.y = -1;
-		dist.y = (wld.plr.pos.y - map.y) * h.y;
-	}
-	// printf("dist.x start = %lf; dist.y start = %lf\n", dist.x, dist.y);							//debug
-	// printf("currently in %d, %d\n", map.x, map.y);
+	ray.hyp.x = 1.0 / cos(angle + wld.plr.rot);
+	ray.hyp.y = 1.0 / sin(angle + wld.plr.rot);
+	grid.x = floor(wld.plr.pos.x);
+	grid.y = floor(wld.plr.pos.y);
+	ray = ray_start(ray, grid, wld);
+	// printf("ray.dist.x start = %lf; ray.dist.y start = %lf\n", ray.dist.x, ray.dist.y);							//debug
+	// printf("currently in %d, %d\n", grid.x, grid.y);
 	// printf("my position %f, %f            ", wld.plr.pos.x, wld.plr.pos.y);												//debug
 	hside = 0;
-	// map.x -= step.x;
-	// map.y -= step.y;
-	// tile = wld.map[map.y][map.x];
+	// grid.x -= ray.step.x;
+	// grid.y -= ray.step.y;
+	// tile = wld.grid[grid.y][grid.x];
 
-	while (map.y >= 0 && map.x >= 0 && map.y < wld.size.y && map.x < wld.size.x && wld.map[map.y][map.x] == '1' )
-	{
-		// printf("testing %d, %d...\n", map.x, map.y);
-		if (fabs(dist.x) < fabs(dist.y))
-		{
-			dist.x += h.x;
-			map.x += step.x;
-			hside = 0;
-		}
-		else
-		{
-			dist.y += h.y;
-			map.y += step.y;
-			hside = 1;
-		}
-	} 
-	while (map.y >= 0 && map.x >= 0 && map.y < wld.size.y && map.x < wld.size.x && wld.map[map.y][map.x] != '1' )
-	{
-		// printf("testing %d, %d...\n", map.x, map.y);
-		if (fabs(dist.x) < fabs(dist.y))
-		{
-			dist.x += h.x;
-			map.x += step.x;
-			hside = 0;
-		}
-		else
-		{
-			dist.y += h.y;
-			map.y += step.y;
-			hside = 1;
-		}
-	} 
-	dist.x = fabs(dist.x - h.x);
-	dist.y = fabs(dist.y - h.y);
+	cast(&ray, &grid, wld, "02");
+	hside = cast(&ray, &grid, wld, "1");
+
+	ray.dist.x = fabs(ray.dist.x - ray.hyp.x);
+	ray.dist.y = fabs(ray.dist.y - ray.hyp.y);
 		// printf("wld.plr.fov.y = %f, tan = %f\n", wld.plr.fov.y, tan(wld.plr.fov.y));
-	column.color = mlx_get_color_value(mlx->id, map.y * 32 + ((map.x * 32) << 16));
+	column.color = mlx_get_color_value(mlx->id, grid.y * 32 + ((grid.x * 32) << 16));
 	// column.color = 0XAAAAAA;
 	if (hside)
 	{
-		// printf("dist.Y = %f; dist.X = %f\n", dist.y, dist.x);													//debug
+		// printf("ray.dist.Y = %f; ray.dist.X = %f\n", ray.dist.y, ray.dist.x);													//debug
 		
 
-		// column.color -= 0x4 * (int)dist.y + ((0x4 * (int)dist.y) << 8) + ((0x4 * (int)dist.y) << 16);
+		// column.color -= 0x4 * (int)ray.dist.y + ((0x4 * (int)ray.dist.y) << 8) + ((0x4 * (int)ray.dist.y) << 16);
 
 		column.color += mlx_get_color_value(mlx->id, 0x111111);
 		// int i = ~0;
 		// while (++i < 3)
 		// {
-		// 	*((char *)&column.color + i) -= 0x01 * floor(dist.y);
+		// 	*((char *)&column.color + i) -= 0x01 * floor(ray.dist.y);
 		// 	if (*((char *)&column.color + i) < 0)
 		// 		*((char *)&column.color + i) = 0;
 		// }
-		// column.color -= mlx_get_color_value(mlx->id, 0x010101 * floor(dist.y));
+		// column.color -= mlx_get_color_value(mlx->id, 0x010101 * floor(ray.dist.y));
 
-		// dist.y = (map.y - wld.plr.pos.y) / sin(angle + wld.plr.rot);
-		column.height = ((mlx->wsize.y / 2) / (dist.y * cos(angle) * tan(wld.plr.fov.y / 2)));
+		// ray.dist.y = (grid.y - wld.plr.pos.y) / sin(angle + wld.plr.rot);
+		column.height = ((mlx->wsize.y / 2) / (ray.dist.y * cos(angle) * tan(wld.plr.fov.y / 2)));
 	}
 	else
 	{
-		// printf("dist.x = %f; dist.y = %f\n", dist.x, dist.y);													//debug
-		// dist.x = (map.x - wld.plr.pos.x) / cos(angle + wld.plr.rot);
+		// printf("ray.dist.x = %f; ray.dist.y = %f\n", ray.dist.x, ray.dist.y);													//debug
+		// ray.dist.x = (grid.x - wld.plr.pos.x) / cos(angle + wld.plr.rot);
 
-		// column.color -= mlx_get_color_value(mlx->id, 0x010101 * floor(dist.x));
+		// column.color -= mlx_get_color_value(mlx->id, 0x010101 * floor(ray.dist.x));
 
 
-		column.height = ((mlx->wsize.y / 2) / (dist.x * cos(angle) * tan(wld.plr.fov.y / 2)));
+		column.height = ((mlx->wsize.y / 2) / (ray.dist.x * cos(angle) * tan(wld.plr.fov.y / 2)));
 	}
 	// printf("column.height = %d\n", column.height);
 	// column.height = 1100;

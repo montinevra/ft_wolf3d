@@ -57,7 +57,7 @@ int			key_press_hook(int key_code, t_mlx *mlx)
 
 	if (key_code >= 0 && key_code <= MAXKEYS)
 	{
-		printf("key pressed!\n");
+		// printf("key pressed!\n");
 		mlx->keys[key_code] = 1;
 	}
 	// if (key_code == 0)
@@ -102,7 +102,7 @@ int			key_release_hook(int key_code, t_mlx *mlx)
 {
 	if (key_code >= 0 && key_code <= MAXKEYS)
 	{
-		printf("key reelased!\n");
+		// printf("key reelased!\n");
 		mlx->keys[key_code] = 0;
 	}
 	if (key_code == 53)

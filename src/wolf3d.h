@@ -28,12 +28,6 @@ typedef struct	s_pos
 	double	y;
 }				t_pos;
 
-// typedef struct	s_vel
-// {
-// 	double	mag;
-// 	double	dir;
-// }				t_vel;
-
 typedef	struct	s_plr
 {
 	t_pos	pos;
@@ -42,19 +36,30 @@ typedef	struct	s_plr
 	double	rot;
 }				t_plr;
 
-// typedef struct	s_keys
-// {
-	
-// };
+typedef struct	s_clrs
+{
+	int	n[4];
+	int	s[4];
+	int	e[4];
+	int	w[4];
+}				t_clrs;
 
 typedef struct	s_wld
 {
 	char		**map;
 	char		*name;
 	t_coord		size;
+	t_clrs		clrs;
 	t_plr		plr;
 	// int			keys[MAXKEYS];
 }				t_wld;
+
+typedef struct	s_ray
+{
+	t_pos	hyp;
+	t_pos	dist;
+	t_coord	step;	
+}				t_ray;
 
 typedef struct	s_col
 {
