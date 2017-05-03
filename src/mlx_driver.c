@@ -12,6 +12,7 @@ static int	is_big_endian(void)
 void		mlx_driver(t_mlx mlx)
 {
 	char	*wname;
+	int 	i;
 
 	wname = ft_strjoin("Wolf3D - ", ((t_wld *)mlx.data)->name);
 	mlx.id = mlx_init();
@@ -23,6 +24,9 @@ void		mlx_driver(t_mlx mlx)
 	mlx.img.endian = is_big_endian();
 	mlx.img.start = mlx_get_data_addr(mlx.img.id, &mlx.img.bppx, &mlx.img.lsize,
 		&mlx.img.endian);
+	i = ~0;
+	while (++i < MAXKEYS)
+		mlx.keys[i] = 0;
 	// int i = 0;
 	// while (1)
 	// {
@@ -33,11 +37,11 @@ void		mlx_driver(t_mlx mlx)
 	mlx_key_hook(mlx.win, key_hook, &mlx);
 	mlx_expose_hook(mlx.win, expose_hook, &mlx);
 	mlx_hook(mlx.win, 2, 0, key_press_hook, &mlx);
-	// mlx_hook(mlx.win, 3, 0, key_release_hook, &mlx);
+	mlx_hook(mlx.win, 3, 0, key_release_hook, &mlx);
 	// if (ft_strequ(((t_frac *)mlx.data)->name, "julia"))
 	// mlx_hook(mlx.win, 6, 0, motion_hook, &mlx);
 	mlx_hook(mlx.win, 17, 0, exit_hook, &mlx);
-	// mlx_do_key_autorepeatoff(mlx.id);
+	mlx_do_key_autorepeatoff(mlx.id);
 
 	mlx_loop_hook(mlx.id, loop_hook, &mlx);
 	mlx_loop(mlx.id);

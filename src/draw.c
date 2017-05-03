@@ -48,7 +48,17 @@ static t_col	get_column(int col, t_mlx *mlx)
 	// col /= 16;
 	// col *= 16;
 	wld = *((t_wld *)mlx->data);
-	angle = wld.plr.fov.x * col / mlx->wsize.x - wld.plr.fov.x / 2;
+
+
+	double adj = mlx->wsize.x / tan(wld.plr.fov.x / 2);
+	double opp = col - mlx->wsize.x / 2;
+	angle = atan2(opp, adj);
+
+
+	// angle = wld.plr.fov.x * col / mlx->wsize.x - wld.plr.fov.x / 2;
+
+
+
 	// printf("angle = %f\n", angle + wld.plr.rot);																				//debug
 	h.x = 1.0 / cos(angle + wld.plr.rot);
 	h.y = 1.0 / sin(angle + wld.plr.rot);
@@ -137,7 +147,7 @@ static t_col	get_column(int col, t_mlx *mlx)
 		// column.color -= mlx_get_color_value(mlx->id, 0x010101 * floor(dist.y));
 
 		// dist.y = (map.y - wld.plr.pos.y) / sin(angle + wld.plr.rot);
-		column.height = ((mlx->wsize.y / 2) * 0.5 / (dist.y * cos(angle) * tan(wld.plr.fov.y / 2)));
+		column.height = ((mlx->wsize.y / 2) / (dist.y * cos(angle) * tan(wld.plr.fov.y / 2)));
 	}
 	else
 	{
@@ -147,7 +157,7 @@ static t_col	get_column(int col, t_mlx *mlx)
 		// column.color -= mlx_get_color_value(mlx->id, 0x010101 * floor(dist.x));
 
 
-		column.height = ((mlx->wsize.y / 2) * 0.5 / (dist.x * cos(angle) * tan(wld.plr.fov.y / 2)));
+		column.height = ((mlx->wsize.y / 2) / (dist.x * cos(angle) * tan(wld.plr.fov.y / 2)));
 	}
 	// printf("column.height = %d\n", column.height);
 	// column.height = 1100;

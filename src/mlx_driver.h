@@ -4,7 +4,7 @@
 # include <pthread.h>
 # include "../minilibx_macos/mlx.h"
 # define THREADS 4
-# define MAXKEYS 126
+# define MAXKEYS 126 + 1
 
 // typedef struct	s_px
 // {
