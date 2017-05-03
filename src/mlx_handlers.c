@@ -3,7 +3,8 @@
 
 int	expose_hook(t_mlx *mlx)
 {
-	draw(mlx);
+	// draw(mlx);
+	mlx++;
 	return (0);
 }
 

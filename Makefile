@@ -2,7 +2,8 @@ NAME = wolf3d
 CC = gcc 
 SRCDIR = src
 SRC = main.c loadmap.c wolf3d.c draw.c \
-	mlx_driver.c mlx_handlers.c mlx_key_handlers.c mlx_mouse_handlers.c
+	mlx_driver.c mlx_handlers.c mlx_key_handlers.c mlx_mouse_handlers.c \
+	more_math.c
 SRC := $(SRC:%.c=$(SRCDIR)/%.c)
 OBJ := $(SRC:.c=.o) 
 CFLAGS = -Wall -Wextra -Werror 
