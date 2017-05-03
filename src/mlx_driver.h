@@ -33,6 +33,7 @@ typedef	struct	s_mlx
 	void		*id;
 	void		*win;
 	t_mlx_img	img;
+	t_mlx_img	fog;
 	t_coord		wsize;
 	char		keys[MAXKEYS];
 	void		*data;

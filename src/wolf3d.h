@@ -65,6 +65,7 @@ typedef struct	s_col
 {
 	int	height;
 	int	color;
+	int	fogclr;
 }				t_col;
 
 t_wld	loadmap(int fd);

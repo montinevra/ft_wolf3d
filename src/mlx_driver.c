@@ -24,6 +24,12 @@ void		mlx_driver(t_mlx mlx)
 	mlx.img.endian = is_big_endian();
 	mlx.img.start = mlx_get_data_addr(mlx.img.id, &mlx.img.bppx, &mlx.img.lsize,
 		&mlx.img.endian);
+	mlx.fog.id = mlx_new_image(mlx.id, mlx.wsize.x, mlx.wsize.y);
+	mlx.fog.bppx = 32;
+	mlx.fog.lsize = mlx.wsize.y * mlx.fog.bppx / 4;
+	mlx.fog.endian = is_big_endian();
+	mlx.fog.start = mlx_get_data_addr(mlx.fog.id, &mlx.fog.bppx, &mlx.fog.lsize,
+		&mlx.fog.endian);
 	i = ~0;
 	while (++i < MAXKEYS)
 		mlx.keys[i] = 0;

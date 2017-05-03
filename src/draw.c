@@ -124,29 +124,15 @@ static t_col	get_column(int col, t_mlx *mlx)
 		// printf("ray.dist.Y = %f; ray.dist.X = %f\n", ray.dist.y, ray.dist.x);													//debug
 		
 
-		// column.color -= 0x4 * (int)ray.dist.y + ((0x4 * (int)ray.dist.y) << 8) + ((0x4 * (int)ray.dist.y) << 16);
-
 		column.color += mlx_get_color_value(mlx->id, 0x111111);
-		// int i = ~0;
-		// while (++i < 3)
-		// {
-		// 	*((char *)&column.color + i) -= 0x01 * floor(ray.dist.y);
-		// 	if (*((char *)&column.color + i) < 0)
-		// 		*((char *)&column.color + i) = 0;
-		// }
-		// column.color -= mlx_get_color_value(mlx->id, 0x010101 * floor(ray.dist.y));
-
-		// ray.dist.y = (grid.y - wld.plr.pos.y) / sin(angle + wld.plr.rot);
+		column.fogclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * ray.dist.y) << 24));
 		column.height = ((mlx->wsize.y / 2) / (ray.dist.y * cos(angle) * tan(wld.plr.fov.y / 2)));
 	}
 	else
 	{
 		// printf("ray.dist.x = %f; ray.dist.y = %f\n", ray.dist.x, ray.dist.y);													//debug
-		// ray.dist.x = (grid.x - wld.plr.pos.x) / cos(angle + wld.plr.rot);
 
-		// column.color -= mlx_get_color_value(mlx->id, 0x010101 * floor(ray.dist.x));
-
-
+		column.fogclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * ray.dist.x) << 24));
 		column.height = ((mlx->wsize.y / 2) / (ray.dist.x * cos(angle) * tan(wld.plr.fov.y / 2)));
 	}
 	// printf("column.height = %d\n", column.height);
@@ -195,6 +181,8 @@ static void	*draw_thread(void *mlxt)
 			*((int *)(mlx->img.start + (px.y) * mlx->img.lsize) + px.x) = ccolor;
 			// printf("fcolor = %d; threads = %d\n", fcolor, THREADS);
 			*((int *)(mlx->img.start + (mlx->wsize.y - px.y - 1) * mlx->img.lsize) + px.x) = fcolor;
+			*((int *)(mlx->fog.start + (px.y) * mlx->fog.lsize) + px.x) = mlx_get_color_value(mlx->id, 0xFF000000);
+			*((int *)(mlx->fog.start + (mlx->wsize.y - px.y - 1) * mlx->fog.lsize) + px.x) = mlx_get_color_value(mlx->id, 0xFF000000);
 			if (!(px.y % (mlx->wsize.y / 128)))
 			{
 				ccolor -= mlx_get_color_value(mlx->id, 0x010101);
@@ -209,6 +197,8 @@ static void	*draw_thread(void *mlxt)
 			// printf("color = %d; threads = %d\n", color, THREADS);
 			*((int *)(mlx->img.start + (px.y) * mlx->img.lsize) + px.x) = col.color;
 			*((int *)(mlx->img.start + (px.y + col.height) * mlx->img.lsize) + px.x) = col.color;
+			*((int *)(mlx->fog.start + (px.y) * mlx->fog.lsize) + px.x) = col.fogclr;
+			*((int *)(mlx->fog.start + (px.y + col.height) * mlx->fog.lsize) + px.x) = col.fogclr;
 			// *(int *)(mlx->img.start + (mlx->wsize.y - px.y) * mlx->img.lsize + px.x * 4) = col.color;
 			px.y++;
 		}
@@ -273,6 +263,7 @@ void		draw(t_mlx *mlx)
 	// */
 
 	mlx_put_image_to_window(mlx->id, mlx->win, mlx->img.id, 0, 0);
+	mlx_put_image_to_window(mlx->id, mlx->win, mlx->fog.id, 0, 0);
 
 	// t_wld	*wld = (t_wld *)mlx->data;																//debug
 	// printf("player pos = %f, %f rot = %f\n", wld->plr.pos.x, wld->plr.pos.y, wld->plr.rot);							//debug
