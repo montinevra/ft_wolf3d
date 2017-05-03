@@ -106,7 +106,7 @@ static t_col	get_column(int col, t_mlx *mlx)
 	// printf("ray.dist.x start = %lf; ray.dist.y start = %lf\n", ray.dist.x, ray.dist.y);							//debug
 	// printf("currently in %d, %d\n", grid.x, grid.y);
 	// printf("my position %f, %f            ", wld.plr.pos.x, wld.plr.pos.y);												//debug
-	hside = 0;
+	// hside = 0;
 	// grid.x -= ray.step.x;
 	// grid.y -= ray.step.y;
 	// tile = wld.grid[grid.y][grid.x];
@@ -125,14 +125,19 @@ static t_col	get_column(int col, t_mlx *mlx)
 		
 
 		column.color += mlx_get_color_value(mlx->id, 0x111111);
-		column.fogclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * ray.dist.y) << 24));
+		if ((int)(0x08 * ray.dist.y) > 0xFF)
+			column.fogclr = mlx_get_color_value(mlx->id, 0x000000);
+		else
+			column.fogclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * ray.dist.y) << 24));
 		column.height = ((mlx->wsize.y / 2) / (ray.dist.y * cos(angle) * tan(wld.plr.fov.y / 2)));
 	}
 	else
 	{
 		// printf("ray.dist.x = %f; ray.dist.y = %f\n", ray.dist.x, ray.dist.y);													//debug
-
-		column.fogclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * ray.dist.x) << 24));
+		if ((int)(0x08 * ray.dist.x) > 0xFF)
+			column.fogclr = mlx_get_color_value(mlx->id, 0x000000);
+		else
+			column.fogclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * ray.dist.x) << 24));
 		column.height = ((mlx->wsize.y / 2) / (ray.dist.x * cos(angle) * tan(wld.plr.fov.y / 2)));
 	}
 	// printf("column.height = %d\n", column.height);
@@ -160,8 +165,9 @@ static void	*draw_thread(void *mlxt)
 
 	mlx = ((t_mlx_thread *)mlxt)->mlx;
 	px.x = ((t_mlx_thread *)mlxt)->y;
+	// t_wld *wld= (t_wld *)mlx->data;
 	// printf("in thread %d\n", px.x);																///deubg
-	
+
 	// printf("mlxt = %p, mlx = %p; img.start = %p; img.end = %p\n", mlxt, mlx, mlx->img.start, mlx->img.start + mlx->wsize.y * mlx->img.lsize);								//debug
 	while (px.x < mlx->wsize.x)
 	{
@@ -181,13 +187,20 @@ static void	*draw_thread(void *mlxt)
 			*((int *)(mlx->img.start + (px.y) * mlx->img.lsize) + px.x) = ccolor;
 			// printf("fcolor = %d; threads = %d\n", fcolor, THREADS);
 			*((int *)(mlx->img.start + (mlx->wsize.y - px.y - 1) * mlx->img.lsize) + px.x) = fcolor;
-			*((int *)(mlx->fog.start + (px.y) * mlx->fog.lsize) + px.x) = mlx_get_color_value(mlx->id, 0xFF000000);
-			*((int *)(mlx->fog.start + (mlx->wsize.y - px.y - 1) * mlx->fog.lsize) + px.x) = mlx_get_color_value(mlx->id, 0xFF000000);
-			if (!(px.y % (mlx->wsize.y / 128)))
-			{
-				ccolor -= mlx_get_color_value(mlx->id, 0x010101);
-				fcolor -= mlx_get_color_value(mlx->id, 0x010101);
-			}
+
+			// float angle = atan2(px.x - mlx->wsize.x / 2, mlx->wsize.x / tan(wld->plr.fov.x / 2));
+			// float dist = (mlx->wsize.y / 2) / px.y / cos(angle) / tan(wld->plr.fov.y / 2);
+			// int flrclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * dist) << 24));
+			int flrclr = mlx_get_color_value(mlx->id, 0xFF000000);
+
+
+			*((int *)(mlx->fog.start + (px.y) * mlx->fog.lsize) + px.x) = flrclr;
+			*((int *)(mlx->fog.start + (mlx->wsize.y - px.y - 1) * mlx->fog.lsize) + px.x) = flrclr;
+			// if (!(px.y % (mlx->wsize.y / 200)))
+			// {
+			// 	ccolor -= mlx_get_color_value(mlx->id, 0x010101);
+			// 	fcolor -= mlx_get_color_value(mlx->id, 0x010101);
+			// }
 		}
 		// *(int *)(mlx->img.start + (px.y) * mlx->img.lsize + px.x * 4) = 0;
 		// *(int *)(mlx->img.start + (mlx->wsize.y - px.y) * mlx->img.lsize + px.x * 4) = 0;
