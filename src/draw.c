@@ -81,6 +81,50 @@ static int		cast(t_ray *ray, t_coord *grid, t_wld wld, char *tiles)
 	return (hside);
 }
 
+static t_col	get_height(t_ray ray, t_coord grid, double angle, int hside, t_mlx *mlx)
+{
+	t_col	column;
+	t_wld	wld;
+
+	wld = *((t_wld *)mlx->data);
+	column.color = mlx_get_color_value(mlx->id, grid.y * 32 + ((grid.x * 32) << 16));
+	if (hside)
+	{
+		// printf("ray.dist.Y = %f; ray.dist.X = %f\n", ray.dist.y, ray.dist.x);													//debug
+		
+
+		column.color += mlx_get_color_value(mlx->id, 0x111111);
+		if ((int)(0x08 * ray.dist.y) > 0xFF)
+			column.fogclr = mlx_get_color_value(mlx->id, 0x000000);
+		else
+			column.fogclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * ray.dist.y) << 24));
+		column.height = ((mlx->wsize.y / 2) / (ray.dist.y * cos(angle) * tan(wld.plr.fov.y / 2)));
+	}
+	else
+	{
+		// printf("ray.dist.x = %f; ray.dist.y = %f\n", ray.dist.x, ray.dist.y);													//debug
+		if ((int)(0x08 * ray.dist.x) > 0xFF)
+			column.fogclr = mlx_get_color_value(mlx->id, 0x000000);
+		else
+			column.fogclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * ray.dist.x) << 24));
+		column.height = ((mlx->wsize.y / 2) / (ray.dist.x * cos(angle) * tan(wld.plr.fov.y / 2)));
+	}
+	// printf("column.height = %d\n", column.height);
+	// column.height = 1100;
+	if (column.height < 0)
+	{
+		// printf("bad height: %d\n", column.height);													///debug
+		column.height = 0;
+	}
+	else if (column.height > mlx->wsize.y / 2)
+	{
+		// printf("bad height: %d\n", column.height);													///debug
+		column.height = mlx->wsize.y / 2;
+	}
+	return (column);
+
+}
+
 static t_col	get_column(int col, t_mlx *mlx)
 {
 	t_col	column;
@@ -116,42 +160,9 @@ static t_col	get_column(int col, t_mlx *mlx)
 
 	ray.dist.x = fabs(ray.dist.x - ray.hyp.x);
 	ray.dist.y = fabs(ray.dist.y - ray.hyp.y);
-		// printf("wld.plr.fov.y = %f, tan = %f\n", wld.plr.fov.y, tan(wld.plr.fov.y));
-	column.color = mlx_get_color_value(mlx->id, grid.y * 32 + ((grid.x * 32) << 16));
-	// column.color = 0XAAAAAA;
-	if (hside)
-	{
-		// printf("ray.dist.Y = %f; ray.dist.X = %f\n", ray.dist.y, ray.dist.x);													//debug
-		
 
-		column.color += mlx_get_color_value(mlx->id, 0x111111);
-		if ((int)(0x08 * ray.dist.y) > 0xFF)
-			column.fogclr = mlx_get_color_value(mlx->id, 0x000000);
-		else
-			column.fogclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * ray.dist.y) << 24));
-		column.height = ((mlx->wsize.y / 2) / (ray.dist.y * cos(angle) * tan(wld.plr.fov.y / 2)));
-	}
-	else
-	{
-		// printf("ray.dist.x = %f; ray.dist.y = %f\n", ray.dist.x, ray.dist.y);													//debug
-		if ((int)(0x08 * ray.dist.x) > 0xFF)
-			column.fogclr = mlx_get_color_value(mlx->id, 0x000000);
-		else
-			column.fogclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * ray.dist.x) << 24));
-		column.height = ((mlx->wsize.y / 2) / (ray.dist.x * cos(angle) * tan(wld.plr.fov.y / 2)));
-	}
-	// printf("column.height = %d\n", column.height);
-	// column.height = 1100;
-	if (column.height < 0)
-	{
-		// printf("bad height: %d\n", column.height);													///debug
-		column.height = 0;
-	}
-	else if (column.height > mlx->wsize.y / 2)
-	{
-		// printf("bad height: %d\n", column.height);													///debug
-		column.height = mlx->wsize.y / 2;
-	}	return (column);
+	column = get_height(ray, grid, angle, hside, mlx);
+	return (column);
 }
 
 static void	*draw_thread(void *mlxt)
