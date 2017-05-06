@@ -71,5 +71,6 @@ typedef struct	s_col
 t_wld	loadmap(int fd);
 void	wolf3d(t_wld wld);
 void	mlx_driver(t_mlx mlx);
+t_col	get_column(int col, t_mlx *mlx);
 
 #endif
