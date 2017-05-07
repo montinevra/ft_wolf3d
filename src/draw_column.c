@@ -52,28 +52,30 @@ static int		cast(t_ray *ray, t_coord *grid, t_wld wld, char *tiles)
 	return (hside);
 }
 
-static t_col	get_height(t_ray ray, double angle, int hside, t_mlx *mlx)
+static unsigned int	get_fogclr(float dist, t_mlx *mlx)
+{
+	unsigned int	fogclr;
+
+	if ((int)(0x08 * dist) > 0xFF)
+		fogclr = mlx_get_color_value(mlx->id, 0x000000);
+	else
+		fogclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * dist) << 24));
+	return (fogclr);
+}
+
+static t_col	get_col_attr(t_ray ray, double angle, int hside, t_mlx *mlx)
 {
 	t_col	column;
-	t_wld	wld;
 
-	wld = *((t_wld *)mlx->data);
-	// column.color = mlx_get_color_value(mlx->id, grid.y * 32 + ((grid.x * 32) << 16));
 	if (hside)
 	{
-		// printf("ray.dist.Y = %f; ray.dist.X = %f\n", ray.dist.y, ray.dist.x);													//debug
-		
 		if (ray.step.y < 0)
 			column.color = mlx_get_color_value(mlx->id, 0x000088);
 		else
 			column.color = mlx_get_color_value(mlx->id, 0x440088);
-
-		// column.color += mlx_get_color_value(mlx->id, 0x111111);
-		if ((int)(0x08 * ray.dist.y) > 0xFF)
-			column.fogclr = mlx_get_color_value(mlx->id, 0x000000);
-		else
-			column.fogclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * ray.dist.y) << 24));
-		column.height = ((mlx->wsize.y / 2) / (ray.dist.y * cos(angle) * tan(wld.plr.fov.y / 2)));
+		column.fogclr = get_fogclr(ray.dist.y, mlx);
+		column.height = ((mlx->wsize.y / 2) / (ray.dist.y * cos(angle) * 
+				tan(((t_wld *)mlx->data)->plr.fov.y / 2)));
 	}
 	else
 	{
@@ -81,28 +83,13 @@ static t_col	get_height(t_ray ray, double angle, int hside, t_mlx *mlx)
 			column.color = mlx_get_color_value(mlx->id, 0x880000);
 		else
 			column.color = mlx_get_color_value(mlx->id, 0x880044);
-
-		// printf("ray.dist.x = %f; ray.dist.y = %f\n", ray.dist.x, ray.dist.y);													//debug
-		if ((int)(0x08 * ray.dist.x) > 0xFF)
-			column.fogclr = mlx_get_color_value(mlx->id, 0x000000);
-		else
-			column.fogclr = mlx_get_color_value(mlx->id, 0 - ((int)(0x08 * ray.dist.x) << 24));
-		column.height = ((mlx->wsize.y / 2) / (ray.dist.x * cos(angle) * tan(wld.plr.fov.y / 2)));
+		column.fogclr = get_fogclr(ray.dist.x, mlx);
+		column.height = ((mlx->wsize.y / 2) / (ray.dist.x * cos(angle) * 
+				tan(((t_wld *)mlx->data)->plr.fov.y / 2)));
 	}
-	// printf("column.height = %d\n", column.height);
-	// column.height = 1100;
-	if (column.height < 0)
-	{
-		// printf("bad height: %d\n", column.height);													///debug
-		column.height = 0;
-	}
-	else if (column.height > mlx->wsize.y / 2)
-	{
-		// printf("bad height: %d\n", column.height);													///debug
+	if (column.height > mlx->wsize.y / 2)
 		column.height = mlx->wsize.y / 2;
-	}
 	return (column);
-
 }
 
 t_col	get_column(int col, t_mlx *mlx)
@@ -111,36 +98,20 @@ t_col	get_column(int col, t_mlx *mlx)
 	double	angle;
 	t_wld	wld;
 	t_ray	ray;
-	// t_pos	ray.hyp;
-	// t_pos	ray.dist;
-	// double	ray.dist.y;
 	t_coord	grid;
 	int 	hside;
-	// t_coord	ray.step;
 
 	wld = *((t_wld *)mlx->data);
 	angle = atan2(col - mlx->wsize.x / 2, mlx->wsize.x / tan(wld.plr.fov.x / 2));
-
-	// printf("angle = %f\n", angle + wld.plr.rot);																				//debug
 	ray.hyp.x = 1.0 / cos(angle + wld.plr.rot);
 	ray.hyp.y = 1.0 / sin(angle + wld.plr.rot);
 	grid.x = floor(wld.plr.pos.x);
 	grid.y = floor(wld.plr.pos.y);
 	ray = ray_start(ray, grid, wld);
-	// printf("ray.dist.x start = %lf; ray.dist.y start = %lf\n", ray.dist.x, ray.dist.y);							//debug
-	// printf("currently in %d, %d\n", grid.x, grid.y);
-	// printf("my position %f, %f            ", wld.plr.pos.x, wld.plr.pos.y);												//debug
-	// hside = 0;
-	// grid.x -= ray.step.x;
-	// grid.y -= ray.step.y;
-	// tile = wld.grid[grid.y][grid.x];
-
 	cast(&ray, &grid, wld, "02");
 	hside = cast(&ray, &grid, wld, "1");
-
 	ray.dist.x = fabs(ray.dist.x - ray.hyp.x);
 	ray.dist.y = fabs(ray.dist.y - ray.hyp.y);
-
-	column = get_height(ray, angle, hside, mlx);
+	column = get_col_attr(ray, angle, hside, mlx);
 	return (column);
 }
