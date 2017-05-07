@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wolf3d.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pvan-erp <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/07 16:22:17 by pvan-erp          #+#    #+#             */
+/*   Updated: 2017/05/07 16:22:20 by pvan-erp         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
 static t_pos	get_start(char **map)
@@ -9,10 +21,6 @@ static t_pos	get_start(char **map)
 	j = ~0;
 	while (map[++j])
 	{
-		// if (ft_strchr(map[j], '2'))
-		// {
-
-		// }
 		i = ~0;
 		while (map[j][++i])
 		{
@@ -29,38 +37,20 @@ static t_pos	get_start(char **map)
 	return (start);
 }
 
-void	wolf3d(t_wld wld)
+void			wolf3d(t_wld wld)
 {
 	t_mlx		mlx;
-	// t_wld		wld;
-	// t_player	player;
 
 	mlx.wsize.x = 640 * 2;
 	mlx.wsize.y = 400 * 2;
-	// wld.map = map;
 	wld.plr.pos = get_start(wld.map);
 	wld.plr.rot = 0;
 	wld.plr.vel.dir = 0;
 	wld.plr.vel.mag = 0;
 	wld.plr.fov.x = M_TAU / 4;
-	wld.plr.fov.y = 2 * atan(tan(wld.plr.fov.x / 2) * mlx.wsize.y / mlx.wsize.x);
-	// wld.plr.fov.y = wld.plr.fov.x * mlx.wsize.y / mlx.wsize.x;
-	// wld.plr.fov.y = M_TAU/ 4;//wld.plr.fov.x;// * mlx.wsize.y / mlx.wsize.x;
-
-	// printf("start = %f, %f\n", wld.plr.pos.x, wld.plr.pos.y);								////debug
-	// printf("fov = %.30f\n", wld.plr.fov.x);								////debug
-	
-
-	// mlx.scalefr = 1.1;
-	// init_scale(&mlx);
-	// mlx.data = (t_frac *)malloc(sizeof(t_frac));
-	// ((t_frac *)mlx.data)->i_max = 0xFF / 8;
-	// ((t_frac *)mlx.data)->name = name;
-	// ((t_frac *)mlx.data)->c.a = 0;
-	// ((t_frac *)mlx.data)->c.b = 0;
+	wld.plr.fov.y = 2 * atan(tan(wld.plr.fov.x / 2) *
+			mlx.wsize.y / mlx.wsize.x);
 	mlx.data = &wld;
-	// printf("%f\n", ((t_wld *)mlx.data)->plr.fov.x);									//debug
-	mlx_driver(mlx);	
-
+	mlx_driver(mlx);
 	return ;
 }

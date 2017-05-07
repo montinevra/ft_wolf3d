@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   loadmap.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pvan-erp <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/07 16:40:05 by pvan-erp          #+#    #+#             */
+/*   Updated: 2017/05/07 16:40:06 by pvan-erp         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf3d.h"
 
 static t_coord	get_size(int fd, char **line)
@@ -6,11 +18,8 @@ static t_coord	get_size(int fd, char **line)
 
 	if (get_next_line(fd, line) > 0)
 	{
-		// printf("................got first line\n");									////debug
 		size.x = ft_atoi(*line);
 		size.y = ft_atoi(ft_strchr(*line, ' '));
-		// printf("................size = %d, %d\n", size.x, size.y);													//debug
-		// printf("................freeing first line\n");														//debug
 		free(*line);
 	}
 	else
@@ -26,16 +35,12 @@ static t_coord	get_size(int fd, char **line)
 	return (size);
 }
 
-t_wld		loadmap(int fd)
+t_wld			loadmap(int fd)
 {
 	t_wld	wld;
-	// t_coord	size;
 	char	*line;
-	int 	i;
+	int		i;
 
-	// printf("................mallocing line\n");															///debug
-	// line = (char **)malloc(sizeof(char *));
-	// printf("................mallocied\n");															///debug
 	wld.size = get_size(fd, &line);
 	wld.map = (char **)malloc(sizeof(char *) * (wld.size.y));
 	i = ~0;
@@ -44,10 +49,6 @@ t_wld		loadmap(int fd)
 		wld.map[i] = ft_strndup(line, wld.size.x);
 		free(line);
 	}
-	// printf("lines = =%d\n", i);														//debug
-	// wld.map[i] = NULL;
 	free(line);
-	// free(line);
-
 	return (wld);
 }

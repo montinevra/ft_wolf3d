@@ -1,6 +1,17 @@
-#include "mlx_driver.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mlx_driver.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pvan-erp <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/07 16:24:18 by pvan-erp          #+#    #+#             */
+/*   Updated: 2017/05/07 16:24:22 by pvan-erp         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "wolf3d.h"
 #include "mlx_handlers.h"
-#include "wolf3d.h"														//debuf
 
 static int			is_big_endian(void)
 {
@@ -8,17 +19,6 @@ static int			is_big_endian(void)
 
 	return (*(((char *)&end) + 3));
 }
-
-// static void			bg_init(t_mlx_img *img, t_mlx mlx)
-// {
-// 	int	i;
-
-// 	i = ~0;
-// 	while (++i < mlx.wsize.x * mlx.wsize.y)
-// 	{
-// 		img->start[i] = mlx_get_color_value(mlx.id, 0x777777);
-// 	}
-// }
 
 static t_mlx_img	img_init(t_mlx mlx)
 {
@@ -36,7 +36,7 @@ static t_mlx_img	img_init(t_mlx mlx)
 void				mlx_driver(t_mlx mlx)
 {
 	char	*wname;
-	int 	i;
+	int		i;
 
 	wname = ft_strjoin("Wolf3D - ", ((t_wld *)mlx.data)->name);
 	mlx.id = mlx_init();
@@ -44,26 +44,15 @@ void				mlx_driver(t_mlx mlx)
 	ft_strdel(&wname);
 	mlx.img = img_init(mlx);
 	mlx.fog = img_init(mlx);
-	// mlx.bg = img_init(mlx);
-	// bg_init(&mlx.bg, mlx);
 	i = ~0;
 	while (++i < MAXKEYS)
 		mlx.keys[i] = 0;
-	// int i = 0;
-	// while (1)
-	// {
-	// 	printf("image lenght = %d img[i] = %c\n", i, mlx.img.start[i]);										//////debug
-	// 	i++;
-	// }
 	mlx_mouse_hook(mlx.win, mouse_hook, &mlx);
-	mlx_key_hook(mlx.win, key_hook, &mlx);
 	mlx_expose_hook(mlx.win, expose_hook, &mlx);
 	mlx_hook(mlx.win, 2, 0, key_press_hook, &mlx);
 	mlx_hook(mlx.win, 3, 0, key_release_hook, &mlx);
-	// mlx_hook(mlx.win, 6, 0, motion_hook, &mlx);
 	mlx_hook(mlx.win, 17, 0, exit_hook, &mlx);
 	mlx_do_key_autorepeatoff(mlx.id);
-
 	mlx_loop_hook(mlx.id, loop_hook, &mlx);
 	mlx_loop(mlx.id);
 }

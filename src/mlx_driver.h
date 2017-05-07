@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mlx_driver.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pvan-erp <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/07 16:43:23 by pvan-erp          #+#    #+#             */
+/*   Updated: 2017/05/07 16:43:25 by pvan-erp         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MLX_DRIVER_H
 # define MLX_DRIVER_H
 # include <stdlib.h>
@@ -5,13 +17,6 @@
 # include "../minilibx_macos/mlx.h"
 # define THREADS 4
 # define MAXKEYS 126 + 1
-
-// typedef struct	s_px
-// {
-// 	int	x;
-// 	int	y;
-// 	int	clr;
-// }				t_px;
 
 typedef struct	s_coord
 {
@@ -42,7 +47,7 @@ typedef	struct	s_mlx
 typedef struct	s_mlx_thread
 {
 	t_mlx	*mlx;
-	int		y;	
+	int		y;
 }				t_mlx_thread;
 
 void			draw(t_mlx *mlx);

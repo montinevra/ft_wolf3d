@@ -17,9 +17,6 @@ int	main(int argc, char const **argv)
 	int		fd;
 	t_wld	wld;
 
-
-
-
 	if (argc != 2)
 	{
 		write(2, "usage:\t", 7);
@@ -36,22 +33,7 @@ int	main(int argc, char const **argv)
 		wld = loadmap(fd);
 		wld.name = (char *)argv[1];
 		close(fd);
-/*		debug
-		int i = ~0, j = ~0;
-		while (++j < wld.size.y)
-		{
-			i = ~0;
-			while (wld.map[j][++i])
-			{
-				printf("%c", wld.map[j][i]);
-			}
-			printf("\n");
-		}
-		printf("world size = %d, %d\n", wld.size.x, wld.size.y);
-//		*/
-
 		wolf3d(wld);
-		
 	}
 	return (0);
 }
