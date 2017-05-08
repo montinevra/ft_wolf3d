@@ -6,7 +6,7 @@
 /*   By: pvan-erp <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/25 20:04:21 by pvan-erp          #+#    #+#             */
-/*   Updated: 2017/05/02 00:20:54 by pvan-erp         ###   ########.fr       */
+/*   Updated: 2017/05/08 15:15:05 by pvan-erp         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,13 @@
 static int	use_base(const char *str)
 {
 	if (ft_tolower(str[1]) == 'x')
-		return (ft_atoi_base(&str[2], 16));
-	else
+	{
+		if (ft_strchr("0123456789abcdef", ft_tolower(str[2])))
+			return (ft_atoi_base(&str[2], 16));
+	}
+	else if (ft_strchr("01234567", str[1]))
 		return (ft_atoi_base(&str[1], 8));
+	return (0);
 }
 
 int			ft_atoi(const char *str)
