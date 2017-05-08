@@ -6,7 +6,7 @@
 /*   By: pvan-erp <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 16:40:05 by pvan-erp          #+#    #+#             */
-/*   Updated: 2017/05/07 16:40:06 by pvan-erp         ###   ########.fr       */
+/*   Updated: 2017/05/08 16:40:56 by pvan-erp         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ t_wld			loadmap(int fd)
 	wld.size = get_size(fd, &line);
 	wld.map = (char **)malloc(sizeof(char *) * (wld.size.y));
 	i = ~0;
-	while (get_next_line(fd, &line) > 0 && ++i < wld.size.y)
+	while (++i < wld.size.y)
 	{
+		get_next_line(fd, &line);
 		wld.map[i] = ft_strndup(line, wld.size.x);
 		free(line);
 	}
-	free(line);
 	return (wld);
 }
