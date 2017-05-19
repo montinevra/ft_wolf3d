@@ -6,7 +6,7 @@
 /*   By: pvan-erp <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 16:23:20 by pvan-erp          #+#    #+#             */
-/*   Updated: 2017/05/08 21:25:24 by pvan-erp         ###   ########.fr       */
+/*   Updated: 2017/05/18 17:08:39 by pvan-erp         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,32 +22,28 @@
 
 int	mouse_hook(int button, int x, int y, t_mlx *mlx)
 {
-	t_wld	*wld;
+	t_plr	plr;
 
-	wld = (t_wld *)mlx->data;
+	plr = ((t_wld *)mlx->data)->plr;
 	if (button == 4)
 	{
-		wld->plr.fov.x *= .9;
-		if (wld->plr.fov.x < M_TAU / 180)
-			wld->plr.fov.x = M_TAU / 180;
-		wld->plr.fov.y = 2 * atan(tan(wld->plr.fov.x / 2) *
-				mlx->wsize.y / mlx->wsize.x);
+		plr.fov.x *= .9;
+		if (plr.fov.x < M_TAU / 180)
+			plr.fov.x = M_TAU / 180;
+		plr.fov.y = 2 * atan(tan(plr.fov.x / 2) * mlx->wsize.y / mlx->wsize.x);
 	}
 	if (button == 5)
 	{
-		wld->plr.fov.x /= .9;
-		if (wld->plr.fov.x > M_TAU / 2.1)
-			wld->plr.fov.x = M_TAU / 2.1;
-		wld->plr.fov.y = 2 * atan(tan(wld->plr.fov.x / 2) *
-				mlx->wsize.y / mlx->wsize.x);
+		plr.fov.x /= .9;
+		if (plr.fov.x > M_TAU / 2.1)
+			plr.fov.x = M_TAU / 2.1;
+		plr.fov.y = 2 * atan(tan(plr.fov.x / 2) * mlx->wsize.y / mlx->wsize.x);
 	}
 	if (button == 3)
 	{
-		wld->plr.fov.x = M_TAU / 4;
-		wld->plr.fov.y = 2 * atan(tan(wld->plr.fov.x / 2) *
-				mlx->wsize.y / mlx->wsize.x);
+		plr.fov.x = M_TAU / 4;
+		plr.fov.y = 2 * atan(tan(plr.fov.x / 2) * mlx->wsize.y / mlx->wsize.x);
 	}
-	x++;
-	y++;
+	x = y;
 	return (0);
 }
